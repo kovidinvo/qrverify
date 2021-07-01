@@ -1,4 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import  QrScanner  from 'qr-scanner'
+
+QrScanner.WORKER_PATH = "../../qr-scanner-worker.min.js"
+
 
 @Component({
   selector: 'app-qrverify',
@@ -11,14 +15,19 @@ export class QrverifyComponent implements OnInit {
   played = false;
   track0: MediaStreamTrack | undefined;
   stream: MediaStream | undefined
+  qrscan : QrScanner | undefined
 
   constructor() { 
-
   }
 
-  async ngOnInit(): Promise<void> {
-    try {
-      this.qrvideo=document.querySelector("#qrcode")
+   ngOnInit(): void {
+    this.qrvideo=document.querySelector("#qrcode")
+    this.initVideo()
+    this.initQrCode()
+  }
+
+  async initVideo() {
+    try {      
       this.stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: {
@@ -35,15 +44,19 @@ export class QrverifyComponent implements OnInit {
       console.debug(e)
     }
   }
+
+  async initQrCode() {
+    this.qrscan = new QrScanner(this.qrvideo,result => console.log(result))
+    await this.qrscan.start()
+  }
   
   onToggle() {
     if(this.played) {
       this.track0?.stop()
-      this.qrvideo.display="none";
+      //this.qrvideo.stop()
     }
     else {
-      this.ngOnInit()
-      this.qrvideo.display="box";
+      this.initVideo()
     }
     this.played=!this.played
   }

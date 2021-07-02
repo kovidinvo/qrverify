@@ -1,4 +1,6 @@
 <p>qrverify works!</p>
-<video id="qrcode"></video>
+<video id="qrcode" [hidden]="!played"></video>
 <br/>
-<button (click)="onToggle()">Toggle video</button>
+<button (click)="onStartScan()">Start scan</button>
+<br/>
+<iframe [src]="qrCodeUrl"></iframe>

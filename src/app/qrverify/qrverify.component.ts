@@ -1,4 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, TestabilityRegistry, ViewChild } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import  QrScanner  from 'qr-scanner'
 
 QrScanner.WORKER_PATH = "../../qr-scanner-worker.min.js"
@@ -13,20 +14,18 @@ export class QrverifyComponent implements OnInit {
 
   qrvideo :any;
   played = false;
-  track0: MediaStreamTrack | undefined;
   stream: MediaStream | undefined
   qrscan : QrScanner | undefined
+  qrCodeUrl : SafeResourceUrl | undefined
 
-  constructor() { 
+  constructor(private sanitizer: DomSanitizer) { 
   }
 
    ngOnInit(): void {
     this.qrvideo=document.querySelector("#qrcode")
-    this.initVideo()
-    this.initQrCode()
   }
 
-  async initVideo() {
+  async startVideo() {
     try {      
       this.stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -35,30 +34,34 @@ export class QrverifyComponent implements OnInit {
           }
         }
       })
-      this.track0 = this.stream.getVideoTracks()[0]
-      console.debug(`get video from ${this.track0.label}`)
       this.qrvideo.srcObject = this.stream
       this.qrvideo.play()
-      this.played=true
+      this.played=true      
     } catch(e) {
       console.debug(e)
     }
   }
 
   async initQrCode() {
-    this.qrscan = new QrScanner(this.qrvideo,result => console.log(result))
+    this.qrscan = new QrScanner(this.qrvideo,result => this.codeScanned(result))
     await this.qrscan.start()
   }
   
-  onToggle() {
-    if(this.played) {
-      this.track0?.stop()
-      //this.qrvideo.stop()
-    }
-    else {
-      this.initVideo()
-    }
-    this.played=!this.played
+
+  onStartScan() {
+    this.startVideo()
+    this.initQrCode()
   }
 
+  stopVideo() {
+    this.stream?.getVideoTracks().forEach( tr => tr.stop())
+    this.qrvideo.srcObject=null
+    this.played=false
+  }
+
+  async codeScanned(result:string) {
+    this.stopVideo()
+    this.qrCodeUrl=this.sanitizer.bypassSecurityTrustResourceUrl(result)
+  }
+ 
 }

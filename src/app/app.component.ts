@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth'
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,7 +10,7 @@ import { AngularFireAuth } from '@angular/fire/auth'
 export class AppComponent {
   title = 'qrverify';  
 
-  constructor(private fbAuth:AngularFireAuth) {
+  constructor(private fbAuth:AngularFireAuth,public route: ActivatedRoute) {
     
   }
  

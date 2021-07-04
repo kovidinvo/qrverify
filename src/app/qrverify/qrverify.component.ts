@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TestabilityRegistry, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, OnInit, Sanitizer, TestabilityRegistry, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import  QrScanner  from 'qr-scanner'
 
@@ -14,11 +14,13 @@ export class QrverifyComponent implements OnInit {
 
   qrvideo :any;
   played = false;
+  isCodeScanned = false;
   stream: MediaStream | undefined
   qrscan : QrScanner | undefined
-  qrCodeUrl : SafeResourceUrl | undefined
+  qrCodeUrl : SafeResourceUrl
 
   constructor(private sanitizer: DomSanitizer) { 
+    this.qrCodeUrl = this.sanitizer.bypassSecurityTrustUrl("")
   }
 
    ngOnInit(): void {
@@ -60,7 +62,7 @@ export class QrverifyComponent implements OnInit {
   }
 
   async codeScanned(result:string) {
-    this.stopVideo()
+    await this.stopVideo()
     this.qrCodeUrl=this.sanitizer.bypassSecurityTrustResourceUrl(result)
   }
  

@@ -1,28 +1,28 @@
 <div *ngIf="!authenticated">
     <button [class]="'btn '+isCollapsed ? 'btn-success': '' " (click)="collapse.toggle()">Вход</button>
-    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="card" style="width: 18rem;">
+    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" class="card" style="width: 30rem;">
         <div class="card-body">
             <h5 class="card-title">Вход в систему</h5>
-           
                 <div class="mb-3">
                     <label for="userPHone" class="form-label">Телефон</label>
                     <div class="input-group mb3">
                         <input type="tel" class="form-control" id="userPhone" [(ngModel)]="userPhone">
-                        <button class="btn btn-successs" id="btnSendCode" [disabled]="codeSent" (click)="login_start()" value="Отправить код"></button>
+                        <button class="btn btn-success" id="btnSendCode" [disabled]="codeSent" (click)="login_start()">Отправить код</button>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div  class="mb-3" *ngIf="codeSent">
                 <div class="input-group mb-3">
-                    <span class="input-group-text" >Код из СМС: G-</span>
+                    <span class="input-group-text" >Код из СМС:</span>
                     <input type="number" class="form-control"[(ngModel)]="userCode">
-                    <button class="btn btn-outline-success" disabled="!codesent" (click)="finishLogin()">Вход</button>
+                    <button class="btn btn-outline-success" [disabled]="!codeSent" (click)="finishLogin()">Вход</button>
                 </div>
-                <span [style]="'display:' + codeSent ? 'box':'none'">Код отправлен</span>
             </div>
 
         </div>
+        
+        <div *ngIf="!codeSent"  id="recaptcha-div"></div>
     </div>
 </div>
 <div *ngIf="authenticated">
-
+    <button class="btn btn-warning" (click)="logout()">Выйти</button>
 </div>

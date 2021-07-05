@@ -20,7 +20,7 @@ export class QrverifyComponent implements OnInit {
   qrCodeUrl : SafeResourceUrl
 
   constructor(private sanitizer: DomSanitizer) { 
-    this.qrCodeUrl = this.sanitizer.bypassSecurityTrustUrl("")
+    this.qrCodeUrl = this.sanitizer.bypassSecurityTrustResourceUrl("")
   }
 
    ngOnInit(): void {
@@ -56,7 +56,7 @@ export class QrverifyComponent implements OnInit {
   }
 
   stopVideo() {
-    this.stream?.getVideoTracks().forEach( tr => tr.stop())
+    this.stream!!.getVideoTracks().forEach( tr => tr.stop())
     this.qrvideo.srcObject=null
     this.played=false
   }

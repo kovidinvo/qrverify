@@ -3,7 +3,7 @@ import { AuthenticationService } from '../authentication.service';
 
 
 
-import * as firebase from 'firebase';
+import firebase from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 
@@ -21,7 +21,7 @@ export class AuthComponent implements OnInit, AfterViewInit {
   userPhone=""
   userCode=""
   codeSent:boolean=false
-  verifier : firebase.default.auth.RecaptchaVerifier | undefined
+  verifier : firebase.auth.RecaptchaVerifier | undefined
   confirmationResult : any;
   windowRef : any
 
@@ -40,7 +40,7 @@ export class AuthComponent implements OnInit, AfterViewInit {
   login_start() {
     console.log("recaptcha init")
     const self = this
-    this.windowRef.verifier = new firebase.default.auth.RecaptchaVerifier('recaptcha-div',{
+    this.windowRef.verifier = new firebase.auth.RecaptchaVerifier('recaptcha-div',{
       'size': 'normal',
       'callback': (result:any) => {console.log(result);self.login()},
       'expired-callback': () => console.log("catptcha expired")

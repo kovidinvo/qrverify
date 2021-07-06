@@ -32,9 +32,9 @@ export class QrverifyComponent implements OnInit {
       this.stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: {
-            ideal: "enviromnent"
+            ideal: "environment"
           }
-        }
+        },audio: false
       })
       this.qrvideo.srcObject = this.stream
       this.qrvideo.play()
@@ -56,14 +56,20 @@ export class QrverifyComponent implements OnInit {
   }
 
   stopVideo() {
-    this.stream!!.getVideoTracks().forEach( tr => tr.stop())
+    this.stream!!.getVideoTracks().forEach( tr => {
+      console.log("Stop track="+tr.label)
+      tr.stop()
+      console.log("remove track")
+      this.stream!!.removeTrack(tr)
+    })    
     this.qrvideo.srcObject=null
     this.played=false
   }
 
   async codeScanned(result:string) {
-    await this.stopVideo()
+    setTimeout(() => this.stopVideo(),1000)
     this.qrCodeUrl=this.sanitizer.bypassSecurityTrustResourceUrl(result)
+    this.isCodeScanned=true
   }
  
 }

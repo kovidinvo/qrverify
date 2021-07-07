@@ -19,6 +19,7 @@ export class QrverifyComponent implements OnInit {
   qrscan : QrScanner | undefined
   qrCodeUrl : SafeResourceUrl
   sourceIcon = "wait"
+  codeStatus="Неверный"
 
   constructor(private sanitizer: DomSanitizer) { 
     this.qrCodeUrl = this.sanitizer.bypassSecurityTrustResourceUrl("")
@@ -70,6 +71,14 @@ export class QrverifyComponent implements OnInit {
 
   async codeScanned(result:string) {
     //setTimeout(() => this.stopVideo(),1000)
+    if(result.match("/^https\:\/\/(immune.mos.ru|gosuslugi.ru).*/")) {
+      this.codeStatus="Код верный"
+      this.sourceIcon = result.indexOf("mos.ru") != -1 ? "mos_logo" : "gosuslugi"
+
+    } else {
+      this.sourceIcon="fail"
+      this.codeStatus="Неверный код"
+    }
     this.qrCodeUrl=this.sanitizer.bypassSecurityTrustResourceUrl(result)
     this.isCodeScanned=true
   }

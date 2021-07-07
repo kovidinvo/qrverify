@@ -18,6 +18,7 @@ export class QrverifyComponent implements OnInit {
   stream: MediaStream | undefined
   qrscan : QrScanner | undefined
   qrCodeUrl : SafeResourceUrl
+  sourceIcon = "wait"
 
   constructor(private sanitizer: DomSanitizer) { 
     this.qrCodeUrl = this.sanitizer.bypassSecurityTrustResourceUrl("")
@@ -25,6 +26,7 @@ export class QrverifyComponent implements OnInit {
 
    ngOnInit(): void {
     this.qrvideo=document.querySelector("#qrcode")
+    this.onStartScan()
   }
 
   async startVideo() {
@@ -67,7 +69,7 @@ export class QrverifyComponent implements OnInit {
   }
 
   async codeScanned(result:string) {
-    setTimeout(() => this.stopVideo(),1000)
+    //setTimeout(() => this.stopVideo(),1000)
     this.qrCodeUrl=this.sanitizer.bypassSecurityTrustResourceUrl(result)
     this.isCodeScanned=true
   }

@@ -1,18 +1,29 @@
 <div class="container">
-<div class="row">
-    <div class="col">
-        <video id="qrcode" [hidden]="!played" width="100%"></video>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-10">
+            <div class="row position-relative">
+                <div class="col">
+                    <video id="qrcode"></video>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
     </div>
-</div>
-<div class="row gy-5">
+
+<div class="row gy-5">    
+    <div class="col"><img [src]="'/assets/images/' + sourceIcon + '.png'"></div>
     <div class="col">
-        <iframe [src]="qrCodeUrl" width="100%" [height]="isCodeScanned ? '400px' : '0px'" style="border: 0;"></iframe>
+        <iframe class="qr-frame" [src]="qrCodeUrl" width="100%" [height]="isCodeScanned ? '400px' : '0px'" style="border: 0;"></iframe>
     </div>
+    <div class="col"></div>
 </div>
 <div class="row justify-content-center">
-    <div class="col-8">
+    <div class="col"></div>
+    <div class="col">
         <button class="btn btn-lg btn-success" (click)="onStartScan()">Сканировать код</button>
     </div>
+    <div class="col"></div>
 </div>
 
 </div>

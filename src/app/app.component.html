@@ -1,7 +1,8 @@
 
 <div class="container">
-<div class="row">
 
+  <div *ngIf="false" class="row">
+    <!-- hidden for now -->
     <div class="col">
 
         <ul ngbNav [activeId]="route.fragment | async">
@@ -19,5 +20,10 @@
 
 </div>
 
-<router-outlet></router-outlet>
+<div class="row ">
+  <div class="col"></div>
+  <div class="col"><h2>Проверь QR код</h2></div>
+  <div class="col"></div>
 </div>
+</div>
+<router-outlet></router-outlet>
